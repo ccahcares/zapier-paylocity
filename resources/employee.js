@@ -1,12 +1,12 @@
 const _sharedBaseUrl = `https://api.paylocity.com/api/v2/companies`;
 
-// get a list of employees
 const performList = async (z, bundle) => {
+  
   const response = await z.request({
     url: `${_sharedBaseUrl}/${bundle.authData.company_id}/employees`,
     params: {
       pagesize: 25,
-      pagenumber: 0,
+      pagenumber: bundle.meta.page,
       includetotalcount: true
     }
   });
@@ -73,8 +73,7 @@ module.exports = {
     },
     operation: {
       perform: performList,
-      // `inputFields` defines the fields a user could provide
-      // Zapier will pass them in as `bundle.inputData` later. They're optional on triggers, but required on searches and creates.
+      canPaginate: true,
       inputFields: []
     }
   },

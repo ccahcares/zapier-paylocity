@@ -11,7 +11,10 @@ describe('resources.employee', () => {
     beforeAll(testUtils.globalBeforeSetup);
 
     it('should run', async () => {
-        const bundle = { 
+        const bundle = {
+            meta: {
+                page: 0
+            }, 
             inputData: {},
             authData: {
                 client_id: process.env.CLIENT_ID,
