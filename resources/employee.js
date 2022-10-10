@@ -85,7 +85,12 @@ module.exports = {
     },
     operation: {
       inputFields: [
-        {key: 'employeeId', label: 'Employee Id', required: true}
+        {
+          key: 'employeeId',
+          label: 'Employee Id',
+          required: true,
+          dynamic: 'employeeList.id',
+        }
       ],
       perform: performSearch
     },
