@@ -1,18 +1,5 @@
 const _sharedBaseUrl = `https://api.paylocity.com/api/v2/companies`;
 
-const _mapEmployeeIds = (employees) => {
-  return employees.map((employee) => {
-    if(employee.homeAddress)
-    {
-      employee.emailAddress = employee.homeAddress.emailAddress || null;
-    }
-    return {
-      ...employee,
-      id: employee.employeeId,
-    };
-  });
-}
-
 // get a list of employees
 const performList = async (z, bundle) => {
   const response = await z.request({
@@ -24,7 +11,15 @@ const performList = async (z, bundle) => {
     }
   });
 
-  return _mapEmployeeIds(response.data);
+  return response.data.map((employee) => {
+
+    employee.$HOIST$ = z.dehydrate(performGet, { employeeId: employee.employeeId });
+
+    return {
+      ...employee,
+      id: employee.employeeId,
+    };
+  });
 };
 
 // get a particular employee by employee id
@@ -33,10 +28,11 @@ const performGet = async (z, bundle) => {
     url: `${_sharedBaseUrl}/${bundle.authData.company_id}/employees/${bundle.inputData.employeeId}`,
     params: {}
   });
-  let employees = [];
-  employees.push(response.data);
-  const data = _mapEmployeeIds(employees);
-  return data[0];
+    
+  return {
+    ...response.data,
+    id: response.data.employeeId,
+  };
 };
 
 // find a particular employee by employee id
@@ -45,10 +41,11 @@ const performSearch = async (z, bundle) => {
     url: `${_sharedBaseUrl}/${bundle.authData.company_id}/employees/${bundle.inputData.employeeId}`,
     params: {}
   });
-  let employees = [];
-  employees.push(response.data);
-  const data = _mapEmployeeIds(employees);
-  return data;
+
+  return [{
+    ...response.data,
+    id: response.data.employeeId,
+  }];
 };
 
 module.exports = {
@@ -111,9 +108,9 @@ module.exports = {
   // Alternatively, a static field definition can be provided, to specify labels for the fields
   // In this resource, these output fields are reused across all resources
   outputFields: [
-    {key: 'employeeId', label: 'Employee Id'},
-    {key: 'firstName', label: 'First Name'},
-    {key: 'lastName', label: 'Last Name'},
-    {key: 'emailAddress', label: 'Email Address'}
+    {key: 'employeeId', label: 'Employee Id', type: 'integer'},
+    {key: 'firstName', label: 'First Name', type: 'string'},
+    {key: 'lastName', label: 'Last Name', type: 'string'},
+    {key: 'homeAddress__emailAddress', label: 'Email Address', type: 'string'}
   ]
 };

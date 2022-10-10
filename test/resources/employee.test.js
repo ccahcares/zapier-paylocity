@@ -40,7 +40,7 @@ describe('resources.employee', () => {
         const results = await appTester(App.resources.employee.search.operation.perform, bundle);
         expect(results[0].firstName).toBeDefined();
         expect(results[0].lastName).toBeDefined();
-        expect(results[0].emailAddress).toBeDefined();
+        expect(results[0].homeAddress['emailAddress']).toBeDefined();
         // TODO: add more assertions
     });
 });
