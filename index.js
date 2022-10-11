@@ -22,7 +22,7 @@ module.exports = {
   triggers: {},
 
   hydrators: {
-    performGet: performGet
+    performGet: employeeResource.get.operation.perform
   },
   // If you want your searches to show up, you better include it here!
   searches: {},
