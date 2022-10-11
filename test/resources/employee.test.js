@@ -14,6 +14,8 @@ describe('resources.employee', () => {
         const bundle = {
             meta: {
                 page: 0,
+                isPopulatingDedupe: true,
+                isLoadingSample: false
             }, 
             inputData: {},
             authData: {

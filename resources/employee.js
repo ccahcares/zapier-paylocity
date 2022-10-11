@@ -4,7 +4,7 @@ const { getDeduper } = require("z-deduper");
 
 const performList = async (z, bundle) => {
   
-  const zapId = bundle.authData.access_token; //test
+  const zapId = bundle.authData.company_id; //test
   if (!zapId) {
     throw new Error("Zap ID is required for the custom deduper to work");
   }
@@ -31,8 +31,10 @@ const performList = async (z, bundle) => {
   });
 
   if (bundle.meta.isPopulatingDedupe) {
+
     // Initialize the custom deduper
     await deduper.initialize(employees);
+    console.log("here.......................................");
 
     // Pass these to the Zapier Deduper
     const changes = deduper.findChanges(employees);
