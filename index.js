@@ -21,6 +21,9 @@ module.exports = {
   // If you want your trigger to show up, you better include it here!
   triggers: {},
 
+  hydrators: {
+    performGet: performGet
+  },
   // If you want your searches to show up, you better include it here!
   searches: {},
 
