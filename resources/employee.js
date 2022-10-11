@@ -1,17 +1,26 @@
 const _sharedBaseUrl = `https://api.paylocity.com/api/v2/companies`;
+const { getDeduper } = require("z-deduper");
+
 
 const performList = async (z, bundle) => {
   
+  const zapId = bundle.authData.access_token; //test
+  if (!zapId) {
+    throw new Error("Zap ID is required for the custom deduper to work");
+  }
+  // Get an instance of the custom deduper
+  const deduper = getDeduper(zapId);
+
   const response = await z.request({
     url: `${_sharedBaseUrl}/${bundle.authData.company_id}/employees`,
     params: {
-      pagesize: 25,
+      pagesize: 250,
       pagenumber: bundle.meta.page,
       includetotalcount: true
     }
   });
 
-  return response.data.map((employee) => {
+  const employees = response.data.map((employee) => {
 
     employee.$HOIST$ = z.dehydrate(performGet, { employeeId: employee.employeeId });
 
@@ -20,6 +29,29 @@ const performList = async (z, bundle) => {
       id: employee.employeeId,
     };
   });
+
+  if (bundle.meta.isPopulatingDedupe) {
+    // Initialize the custom deduper
+    await deduper.initialize(employees);
+
+    // Pass these to the Zapier Deduper
+    const changes = deduper.findChanges(employees);
+    return changes.all;
+  }
+
+  if (bundle.meta.isLoadingSample) {
+    const changes = deduper.findChanges(employees);
+    return changes.all;
+  }
+
+  // If we get here, it means that the zap is enabled
+  // The follwing will run on each polling interval
+  await deduper.load();
+  const changes = deduper.findChanges(employees);
+  await deduper.persistChanges(employees);
+
+  // Returns only the newly created records
+  return changes.created;
 };
 
 // get a particular employee by employee id

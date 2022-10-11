@@ -13,7 +13,7 @@ describe('resources.employee', () => {
     it('should run', async () => {
         const bundle = {
             meta: {
-                page: 0
+                page: 0,
             }, 
             inputData: {},
             authData: {
