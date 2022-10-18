@@ -34,7 +34,6 @@ const performList = async (z, bundle) => {
 
     // Initialize the custom deduper
     await deduper.initialize(employees);
-    console.log("here.......................................");
 
     // Pass these to the Zapier Deduper
     const changes = deduper.findChanges(employees);
