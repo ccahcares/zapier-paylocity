@@ -7,7 +7,7 @@
     "test": "jest --testTimeout 10000"
   },
   "dependencies": {
-    "z-deduper": "^1.0.3",
+    "z-deduper": "^0.5.0",
     "zapier-platform-core": "12.1.0"
   },
   "devDependencies": {
