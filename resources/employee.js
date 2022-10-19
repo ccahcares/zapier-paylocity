@@ -102,7 +102,7 @@ module.exports = {
   list: {
     display: {
       label: 'New Employee',
-      description: 'Lists the employees.'
+      description: 'Triggers when a new employee is added.'
     },
     operation: {
       perform: performList,
@@ -134,6 +134,7 @@ module.exports = {
   // returned records, and have obvious placeholder values that we can show to any user.
   // In this resource, the sample is reused across all methods
   sample: {
+    id: 1,
     employeeId: 1,
     statusCode: 'A',
     statusTypeCode: null
